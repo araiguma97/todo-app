@@ -5,20 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -123,6 +119,15 @@ class MainActivity : ComponentActivity() {
                     title = { Text("To Do") }
                 )
             },
+            floatingActionButton = {
+                FloatingActionButton(onClick = {
+                    if (text.isEmpty()) return@FloatingActionButton
+                    postTask(text)
+                    text = ""
+                }) {
+                    Icon(Icons.Filled.Add, "Add")
+                }
+            }
         ) { padding ->
             Column {
                 LazyColumn(
@@ -137,18 +142,10 @@ class MainActivity : ComponentActivity() {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(16.dp)
                 ) {
-                    IconButton(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
-                        onClick = {
-
-                        }
-                    ) {
-                        Icon(Icons.Rounded.Face, contentDescription = "Emoji")
-                    }
                     OutlinedTextField(
                         value = text,
                         onValueChange = { it -> text = it },
-                        modifier = Modifier.weight(5f)
+                        modifier = Modifier.weight(6f)
                     )
                     IconButton(
                         modifier = Modifier.weight(1f),
@@ -168,8 +165,6 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun TaskItem(task: Task) {
-        var checked: Boolean by remember { mutableStateOf(task.isCompleted) }
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
